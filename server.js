@@ -1,51 +1,36 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
 
-// Temporary in-memory storage
-const users = [];
+const PORT = process.env.PORT || 3000;
+
+let submissions = [];
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/submit', (req, res) => {
-    const { username, email, password } = req.body;
-    let errorMsg = '';
+    const { fullname, email, password } = req.body;
 
-    // Server-side validation
-    if (!username || username.trim().length < 3) {
-        errorMsg = 'Username must be at least 3 characters.';
-    } else if (!email || !email.match(/^[\w\.-]+@[\w\.-]+\.\w{2,}$/)) {
-        errorMsg = 'Enter a valid email address.';
-    } else if (!password || password.length < 6) {
-        errorMsg = 'Password must be at least 6 characters.';
+    if (!fullname || !email || !password) {
+        return res.send("All fields are required. Please go back and fill them.");
     }
 
-    if (errorMsg) {
-        // Respond with error message (simple inline HTML for demo purposes)
-        return res.send(`
-            <div style="color:red; margin:20px auto; max-width:400px; font-family:Arial;">
-                <p>${errorMsg}</p>
-                <a href="/" style="color:#4CAF50;">Go Back</a>
-            </div>
-        `);
+    if (!email.includes('@') || !email.includes('.')) {
+        return res.send("Invalid email format. Please go back.");
     }
 
-    // Store validated data (in memory)
-    users.push({ username, email });
+    if (password.length < 6) {
+        return res.send("Password too short. Must be at least 6 characters.");
+    }
 
-    res.send(`
-        <div style="color:green; margin:20px auto; max-width:400px; font-family:Arial;">
-            <p>Registration successful!</p>
-            <p>User: ${username} | Email: ${email}</p>
-            <a href="/" style="color:#4CAF50;">Register Another</a>
-        </div>
-    `);
+    submissions.push({ fullname, email, password });
+    console.log("Current Submissions:", submissions);
+
+    res.send(`<h2>Thank you, ${fullname}!</h2><p>Your data has been submitted successfully.</p>`);
 });
 
-app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });

@@ -2,26 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Task 2: Form Validation</title>
+    <title>Task 2: Registration Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.pexels.com/photos/743986/pexels-photo-743986.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 80px auto;
+            background: rgba(255, 255, 255, 0.9); /* translucent white */
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #6a11cb;
+            outline: none;
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #error {
+            color: red;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 500px) {
+            .container {
+                margin: 30px 15px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
-<body style="font-family: Arial; background-color: #f2f2f2; margin: 0; padding: 0;">
-    <div style="max-width: 400px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-        <h2 style="text-align: center;">Registration Form</h2>
+<body>
+
+    <div class="container">
+        <h2>Registration Form</h2>
         <form action="/submit" method="POST" onsubmit="return validateForm()">
-            <label style="display: block; margin: 10px 0 5px;">Full Name:</label>
-            <input type="text" name="fullname" id="fullname" style="width: 100%; padding: 8px;" required>
+            <label for="fullname">Full Name:</label>
+            <input type="text" name="fullname" id="fullname" required>
 
-            <label style="display: block; margin: 10px 0 5px;">Email:</label>
-            <input type="email" name="email" id="email" style="width: 100%; padding: 8px;" required>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" required>
 
-            <label style="display: block; margin: 10px 0 5px;">Password:</label>
-            <input type="password" name="password" id="password" style="width: 100%; padding: 8px;" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required>
 
-            <button type="submit" style="margin-top: 20px; padding: 10px; width: 100%; background-color: #28a745; color: white; border: none; border-radius: 5px;">
-                Submit
-            </button>
+            <button type="submit">Submit</button>
         </form>
-        <p id="error" style="color: red; margin-top: 10px;"></p>
+        <p id="error"></p>
     </div>
 
     <script>
@@ -38,16 +116,4 @@
 
             if (!email.includes("@") || !email.includes(".")) {
                 error.textContent = "Enter a valid email!";
-                return false;
-            }
-
-            if (password.length < 6) {
-                error.textContent = "Password must be at least 6 characters!";
-                return false;
-            }
-
-            return true;
-        }
-    </script>
-</body>
-</html>
+                return false
